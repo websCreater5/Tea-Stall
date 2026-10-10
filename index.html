@@ -1,0 +1,815 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tea Stall - Order System</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f3f5f1;
+  color: #202b24;
+}
+
+header {
+  background: #164333;
+  color: white;
+  text-align: center;
+  padding: 25px 15px;
+}
+
+header h1 {
+  font-size: 30px;
+  letter-spacing: 2px;
+}
+
+header p {
+  margin-top: 8px;
+  color: #d5e6d9;
+}
+
+.container {
+  max-width: 950px;
+  margin: 25px auto;
+  padding: 15px;
+}
+
+.card {
+  background: white;
+  padding: 22px;
+  margin-bottom: 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px #0000000c;
+}
+
+h2 {
+  margin-bottom: 18px;
+  color: #164333;
+}
+
+label {
+  display: block;
+  margin: 12px 0 6px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccd5cd;
+  border-radius: 7px;
+  font-size: 16px;
+  background: white;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 12px;
+}
+
+button {
+  padding: 12px 16px;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+button:focus-visible {
+  outline: 3px solid #d5a94f;
+  outline-offset: 2px;
+}
+
+.primary {
+  background: #164333;
+  color: white;
+}
+
+.primary:hover {
+  background: #236348;
+}
+
+.secondary {
+  background: #e7efe8;
+  color: #164333;
+}
+
+.danger {
+  background: #ffebe8;
+  color: #a52b20;
+}
+
+button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.full {
+  width: 100%;
+  margin-top: 15px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 18px;
+}
+
+th, td {
+  padding: 12px 7px;
+  border-bottom: 1px solid #e5e9e4;
+  text-align: left;
+  font-size: 14px;
+}
+
+th {
+  background: #edf3ed;
+  color: #164333;
+}
+
+.bill-total {
+  margin-top: 18px;
+  background: #f0f5ef;
+  padding: 18px;
+  border-radius: 10px;
+}
+
+.bill-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.grand-total {
+  font-size: 23px;
+  font-weight: bold;
+  color: #164333;
+  border-top: 1px dashed #a9b9aa;
+  padding-top: 14px;
+}
+
+.order-entry {
+  border: 1px solid #e0e7df;
+  border-radius: 9px;
+  padding: 14px;
+  margin-top: 12px;
+}
+
+.order-entry p {
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+.muted {
+  color: #68746b;
+  font-size: 13px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+#message {
+  margin-top: 12px;
+  color: #164333;
+  font-weight: bold;
+}
+
+footer {
+  text-align: center;
+  padding: 22px;
+  color: #69766c;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .grid .item-field {
+    grid-column: 1 / -1;
+  }
+
+  .card {
+    padding: 15px;
+  }
+
+  header h1 {
+    font-size: 25px;
+  }
+
+  th, td {
+    padding: 9px 4px;
+    font-size: 12px;
+  }
+}
+
+/* Receipt printing */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+
+  #printReceipt, #printReceipt * {
+    visibility: visible !important;
+  }
+
+  #printReceipt {
+    display: block !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    color: black;
+    background: white;
+  }
+
+  .receipt-paper {
+    width: 100%;
+    max-width: 300px;
+    margin: auto;
+    font-family: monospace;
+    font-size: 12px;
+  }
+
+  .receipt-paper h2 {
+    color: black;
+    text-align: center;
+    margin-bottom: 5px;
+  }
+
+  .receipt-paper .center {
+    text-align: center;
+  }
+
+  .receipt-paper hr {
+    border: none;
+    border-top: 1px dashed black;
+    margin: 9px 0;
+  }
+
+  .receipt-paper table {
+    margin-top: 8px;
+  }
+
+  .receipt-paper th {
+    background: white;
+  }
+
+  .receipt-paper th, .receipt-paper td {
+    color: black;
+    padding: 5px 2px;
+    font-size: 11px;
+  }
+
+  .receipt-paper .bill-row {
+    margin: 7px 0;
+  }
+
+  @page {
+    size: 80mm auto;
+    margin: 4mm;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>☕ TEA STALL</h1>
+  <p>Order Management & Billing System</p>
+</header>
+
+<main class="container">
+
+  <section class="card">
+    <h2>📊 Today's Summary</h2>
+    <div class="grid">
+      <div>
+        <p class="muted">Today's Sales</p>
+        <h2 id="sales">Rs 0</h2>
+      </div>
+      <div>
+        <p class="muted">Orders</p>
+        <h2 id="orderCount">0</h2>
+      </div>
+      <div>
+        <p class="muted">Cups Sold</p>
+        <h2 id="cupsSold">0</h2>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>🧾 Create New Order</h2>
+
+    <label for="customer">Customer Name (Optional)</label>
+    <input id="customer" placeholder="Enter customer name">
+
+    <div class="grid">
+      <div class="item-field">
+        <label for="item">Select Item</label>
+        <select id="item">
+          <option value="Regular Chai">Regular Chai</option>
+          <option value="Doodh Patti">Doodh Patti</option>
+          <option value="Karak Chai">Karak Chai</option>
+          <option value="Green Tea">Green Tea</option>
+          <option value="Kashmiri Chai">Kashmiri Chai</option>
+          <option value="Water Bottle">Water Bottle</option>
+          <option value="Other">Other Item</option>
+        </select>
+        <input id="customItem" placeholder="Enter item name"
+               style="display:none;margin-top:8px">
+      </div>
+
+      <div>
+        <label for="qty">Quantity</label>
+        <input id="qty" type="number" min="1" step="1" value="1">
+      </div>
+
+      <div>
+        <label for="price">Price (Rs)</label>
+        <input id="price" type="number" min="0" step="1" value="80">
+      </div>
+    </div>
+
+    <button class="primary full" id="addItem">
+      + Add Item to Order
+    </button>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Qty</th>
+          <th>Price</th>
+          <th>Total</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="cart">
+        <tr>
+          <td colspan="5" style="text-align:center">
+            No items added yet.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <label for="discount">Discount (Rs)</label>
+    <input id="discount" type="number" min="0" value="0">
+
+    <label for="payment">Payment Status</label>
+    <select id="payment">
+      <option>Paid</option>
+      <option>Unpaid</option>
+    </select>
+
+    <div class="bill-total">
+      <div class="bill-row">
+        <span>Subtotal</span>
+        <strong id="subtotal">Rs 0</strong>
+      </div>
+
+      <div class="bill-row">
+        <span>Discount</span>
+        <strong id="discountView">Rs 0</strong>
+      </div>
+
+      <div class="bill-row grand-total">
+        <span>Total Bill</span>
+        <span id="total">Rs 0</span>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:12px">
+      <button class="primary" id="savePrint">
+        Save & Print Bill
+      </button>
+      <button class="secondary" id="saveOrder">
+        Save Order
+      </button>
+    </div>
+
+    <button class="danger full" id="clearCart">
+      Clear Current Order
+    </button>
+
+    <p id="message" role="status" aria-live="polite"></p>
+  </section>
+
+  <section class="card">
+    <h2>📋 Recent Orders</h2>
+    <p class="muted">Your saved orders on this device.</p>
+    <div id="history"></div>
+
+    <div class="actions">
+      <button class="secondary" id="exportCSV">Export Orders (CSV)</button>
+    </div>
+  </section>
+
+</main>
+
+<div id="printReceipt" style="display:none"></div>
+
+<footer>
+  Tea Stall Order System · Thank You!
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+const KEY = "teaStallOrdersEnglishV1";
+
+let cart = [];
+let orders = loadOrders();
+let nextNumber = Math.max(0, ...orders.map(o => o.number || 0)) + 1;
+
+const defaultPrices = {
+  "Regular Chai": 80,
+  "Doodh Patti": 100,
+  "Karak Chai": 100,
+  "Green Tea": 70,
+  "Kashmiri Chai": 150,
+  "Water Bottle": 50,
+  "Other": 0
+};
+
+function loadOrders() {
+  try {
+    const data = JSON.parse(localStorage.getItem(KEY) || "[]");
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
+function persist() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(orders));
+    return true;
+  } catch {
+    alert("Unable to save. Please export your orders.");
+    return false;
+  }
+}
+
+function money(n) {
+  return "Rs " + Number(n).toLocaleString("en-PK", {
+    maximumFractionDigits: 2
+  });
+}
+
+function safe(text) {
+  return String(text ?? "").replace(/[&<>"']/g, ch => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[ch]);
+}
+
+function subtotal() {
+  return cart.reduce((sum, item) =>
+    sum + item.qty * item.price, 0);
+}
+
+function discount() {
+  return Math.min(
+    subtotal(),
+    Math.max(0, Number($("discount").value) || 0)
+  );
+}
+
+function total() {
+  return subtotal() - discount();
+}
+
+function showMessage(message) {
+  $("message").textContent = message;
+}
+
+function renderCart() {
+  const body = $("cart");
+
+  if (!cart.length) {
+    body.innerHTML = `
+      <tr><td colspan="5" style="text-align:center">
+        No items added yet.
+      </td></tr>`;
+  } else {
+    body.innerHTML = cart.map((item, index) => `
+      <tr>
+        <td>${safe(item.name)}</td>
+        <td>${item.qty}</td>
+        <td>${money(item.price)}</td>
+        <td>${money(item.qty * item.price)}</td>
+        <td>
+          <button class="danger" data-remove="${index}"
+                  aria-label="Remove ${safe(item.name)}">×</button>
+        </td>
+      </tr>
+    `).join("");
+  }
+
+  body.querySelectorAll("[data-remove]").forEach(button => {
+    button.addEventListener("click", () => {
+      cart.splice(Number(button.dataset.remove), 1);
+      renderCart();
+    });
+  });
+
+  $("subtotal").textContent = money(subtotal());
+  $("discountView").textContent = money(discount());
+  $("total").textContent = money(total());
+}
+
+function renderSummary() {
+  const today = new Date().toLocaleDateString("en-CA");
+  const todayOrders = orders.filter(o => o.dateKey === today);
+
+  $("sales").textContent = money(
+    todayOrders.reduce((sum, o) => sum + o.total, 0)
+  );
+
+  $("orderCount").textContent = todayOrders.length;
+
+  $("cupsSold").textContent = todayOrders.reduce(
+    (sum, o) => sum + o.items.reduce((n, i) => n + i.qty, 0), 0
+  );
+}
+
+function renderHistory() {
+  const host = $("history");
+
+  if (!orders.length) {
+    host.innerHTML = '<p class="muted" style="margin-top:15px">No orders yet.</p>';
+    return;
+  }
+
+  host.innerHTML = [...orders].reverse().slice(0, 30).map(o => `
+    <div class="order-entry">
+      <strong>Order #${String(o.number).padStart(4, "0")}</strong>
+      <p>Customer: ${safe(o.customer || "Walk-in Customer")}</p>
+      <p>${safe(o.date)} · ${safe(o.time)}</p>
+      <p>Total: <strong>${money(o.total)}</strong></p>
+      <p>Payment: ${safe(o.payment)}</p>
+      <div class="actions">
+        <button class="secondary" data-print="${safe(o.id)}">Print Receipt</button>
+        <button class="secondary" data-copy="${safe(o.id)}">Copy Bill Text</button>
+      </div>
+    </div>
+  `).join("");
+
+  host.querySelectorAll("[data-print]").forEach(btn => {
+    btn.addEventListener("click", () => printOrder(btn.dataset.print));
+  });
+
+  host.querySelectorAll("[data-copy]").forEach(btn => {
+    btn.addEventListener("click", () => copyBill(btn.dataset.copy));
+  });
+}
+
+function receiptHTML(o) {
+  const rows = o.items.map(i => `
+    <tr>
+      <td>${safe(i.name)}<br>${i.qty} x ${money(i.price)}</td>
+      <td>${money(i.qty * i.price)}</td>
+    </tr>
+  `).join("");
+
+  return `
+    <div class="receipt-paper">
+      <h2>TEA STALL</h2>
+      <div class="center">Order Receipt</div>
+      <hr>
+      <p>Bill No: #${String(o.number).padStart(4, "0")}</p>
+      <p>Date: ${safe(o.date)} ${safe(o.time)}</p>
+      <p>Customer: ${safe(o.customer || "Walk-in Customer")}</p>
+      <hr>
+      <table>
+        <thead><tr><th>Item</th><th>Amount</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <hr>
+      <div class="bill-row"><span>Subtotal</span><span>${money(o.subtotal)}</span></div>
+      <div class="bill-row"><span>Discount</span><span>${money(o.discount)}</span></div>
+      <div class="bill-row grand-total"><span>TOTAL</span><span>${money(o.total)}</span></div>
+      <hr>
+      <p>Payment: ${safe(o.payment)}</p>
+      <p class="center" style="margin-top:12px">Thank You! Visit Again.</p>
+    </div>`;
+}
+
+function printOrder(id) {
+  const order = orders.find(o => String(o.id) === String(id));
+  if (!order) return;
+
+  $("printReceipt").innerHTML = receiptHTML(order);
+  window.print();
+}
+
+function copyBill(id) {
+  const o = orders.find(item => String(item.id) === String(id));
+  if (!o) return;
+
+  const text = [
+    "TEA STALL",
+    "Order #" + String(o.number).padStart(4, "0"),
+    "Date: " + o.date + " " + o.time,
+    "Customer: " + (o.customer || "Walk-in Customer"),
+    "------------------------------",
+    ...o.items.map(i =>
+      `${i.name}: ${i.qty} x ${money(i.price)} = ${money(i.qty * i.price)}`
+    ),
+    "Subtotal: " + money(o.subtotal),
+    "Discount: " + money(o.discount),
+    "TOTAL: " + money(o.total),
+    "Payment: " + o.payment,
+    "Thank You! Visit Again."
+  ].join("\n");
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text)
+      .then(() => showMessage("Bill copied successfully!"))
+      .catch(() => fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  const area = document.createElement("textarea");
+  area.value = text;
+  area.style.position = "fixed";
+  area.style.opacity = "0";
+  document.body.appendChild(area);
+  area.select();
+
+  try {
+    document.execCommand("copy");
+    showMessage("Bill copied. You can paste it anywhere.");
+  } catch {
+    window.prompt("Copy your bill text:", text);
+  }
+
+  area.remove();
+}
+
+function saveOrder(shouldPrint) {
+  if (!cart.length) {
+    showMessage("Please add at least one item first.");
+    return;
+  }
+
+  const now = new Date();
+
+  const order = {
+    id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),
+    number: nextNumber,
+    date: now.toLocaleDateString("en-GB"),
+    dateKey: now.getFullYear() + "-" +
+      String(now.getMonth() + 1).padStart(2, "0") + "-" +
+      String(now.getDate()).padStart(2, "0"),
+    time: now.toLocaleTimeString([], {
+      hour: "2-digit", minute: "2-digit"
+    }),
+    customer: $("customer").value.trim(),
+    items: cart.map(i => ({...i})),
+    subtotal: subtotal(),
+    discount: discount(),
+    total: total(),
+    payment: $("payment").value
+  };
+
+  orders.push(order);
+
+  if (!persist()) {
+    orders.pop();
+    return;
+  }
+
+  nextNumber++;
+  renderSummary();
+  renderHistory();
+
+  cart = [];
+  $("customer").value = "";
+  $("discount").value = "0";
+  $("payment").value = "Paid";
+
+  renderCart();
+  showMessage("Order #" + String(order.number).padStart(4, "0") + " saved!");
+
+  if (shouldPrint) printOrder(order.id);
+}
+
+$("item").addEventListener("change", () => {
+  const item = $("item").value;
+  $("price").value = defaultPrices[item] ?? 0;
+  $("customItem").style.display = item === "Other" ? "block" : "none";
+});
+
+$("addItem").addEventListener("click", () => {
+  const selected = $("item").value;
+  const name = selected === "Other"
+    ? $("customItem").value.trim()
+    : selected;
+
+  const qty = Number($("qty").value);
+  const price = Number($("price").value);
+
+  if (!name) {
+    showMessage("Please enter an item name.");
+    return;
+  }
+
+  if (!Number.isInteger(qty) || qty < 1) {
+    showMessage("Quantity must be a whole number greater than zero.");
+    return;
+  }
+
+  if (!Number.isFinite(price) || price < 0) {
+    showMessage("Please enter a valid price.");
+    return;
+  }
+
+  cart.push({name, qty, price});
+  $("qty").value = "1";
+  renderCart();
+  showMessage("Item added successfully.");
+});
+
+$("discount").addEventListener("input", renderCart);
+$("saveOrder").addEventListener("click", () => saveOrder(false));
+$("savePrint").addEventListener("click", () => saveOrder(true));
+
+$("clearCart").addEventListener("click", () => {
+  cart = [];
+  $("customer").value = "";
+  $("discount").value = "0";
+  $("payment").value = "Paid";
+  renderCart();
+  showMessage("Current order cleared.");
+});
+
+$("exportCSV").addEventListener("click", () => {
+  if (!orders.length) {
+    showMessage("No orders available to export.");
+    return;
+  }
+
+  const rows = [[
+    "Order Number", "Date", "Time", "Customer",
+    "Items", "Subtotal", "Discount", "Total", "Payment"
+  ]];
+
+  orders.forEach(o => rows.push([
+    o.number, o.date, o.time, o.customer,
+    o.items.map(i => `${i.name} (${i.qty} x ${i.price})`).join("; "),
+    o.subtotal, o.discount, o.total, o.payment
+  ]));
+
+  const csv = rows.map(row =>
+    row.map(value =>
+      '"' + String(value ?? "").replace(/"/g, '""') + '"'
+    ).join(",")
+  ).join("\r\n");
+
+  const blob = new Blob(["\uFEFF" + csv], {
+    type: "text/csv;charset=utf-8;"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "tea-stall-orders.csv";
+  link.click();
+  URL.revokeObjectURL(url);
+
+  showMessage("Order history exported.");
+});
+
+renderCart();
+renderSummary();
+renderHistory();
+</script>
+
+</body>
+</html>
