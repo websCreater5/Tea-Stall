@@ -6,8 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tea Stall - Order System</title>
 
-<link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#6f4e37">
 
 <style>
 * {
@@ -812,14 +810,6 @@ $("exportCSV").addEventListener("click", () => {
 renderCart();
 renderSummary();
 renderHistory();
-</script>
-<script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./service.worker.js")
-        .catch(error => console.error("Service Worker error:", error));
-    });
-  }
-</script>
+</script>                            
 </body>
 </html>
