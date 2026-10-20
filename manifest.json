@@ -1,0 +1,11 @@
+
+{
+  "name": "Tea Stall",
+  "short_name": "Tea Stall",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6f4e37",
+  "description": "Tea Stall ordering and billing app"
+}
