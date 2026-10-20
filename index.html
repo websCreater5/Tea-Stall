@@ -224,7 +224,7 @@ footer {
 
 /* Receipt printing */
 @media print {
-  body * {
+   * {
     visibility: hidden !important;
   }
 
@@ -292,7 +292,7 @@ footer {
 </style>
 </head>
 
-<body>
+<>
 
 <header>
   <h1>☕ TEA STALL</h1>
@@ -366,13 +366,13 @@ footer {
           <th></th>
         </tr>
       </thead>
-      <tbody id="cart">
+      <t id="cart">
         <tr>
           <td colspan="5" style="text-align:center">
             No items added yet.
           </td>
         </tr>
-      </tbody>
+      </t>
     </table>
 
     <label for="discount">Discount (Rs)</label>
@@ -813,6 +813,13 @@ renderCart();
 renderSummary();
 renderHistory();
 </script>
-
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./service.worker.js")
+        .catch(error => console.error("Service Worker error:", error));
+    });
+  }
+</script>
 </body>
 </html>
